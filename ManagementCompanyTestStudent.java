@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ManagementCompanyTestStudent {
-	Property sampleProperty;
+	Property sampleProperty, sampleProperty2;
 	ManagementCompany managementCo ; 
 	
 	@Before
@@ -21,6 +21,7 @@ public class ManagementCompanyTestStudent {
 	@Test
 	public void testGetPlot() 
 	{
+		
 		sampleProperty = new Property ("Sunsational", "Beckman", 2613, "BillyBob Wilson",2,5,2,2);
 		assertEquals(sampleProperty.getPlot().getX(), 2);
 		assertEquals(sampleProperty.getPlot().getY(), 5);
@@ -39,13 +40,16 @@ public class ManagementCompanyTestStudent {
 	@Test
 	public void testAddProperty() {
 		sampleProperty = new Property ("Sunsational", "Beckman", 2613, "BillyBob Wilson",2,5,2,2);		 
-		assertEquals(managementCo.addProperty(sampleProperty), 0);	
+		assertEquals(managementCo.addProperty(sampleProperty),0,0);	
 	}
 	
 	@Test
 	public void testGetPropertiesCount() {
-		sampleProperty = new Property ("Sunsational", "Beckman", 2613, "BillyBob Wilson",2,5,2,2);		 
-		assertEquals(managementCo.getPropertiesCount(), 1);
+		sampleProperty = new Property ("Sunsational", "Beckman", 2613, "BillyBob Wilson",2,5,2,2);
+		sampleProperty2 = new Property ("Sunsational", "Beckman", 2613, "BillyBob Wilson",5,6,1,1);
+		assertEquals(managementCo.addProperty(sampleProperty),0,0);
+		assertEquals(managementCo.addProperty(sampleProperty2),1,1); 
+		assertEquals(managementCo.getPropertiesCount(), 2); 
 	}
 
 	@Test
