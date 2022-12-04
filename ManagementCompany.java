@@ -12,7 +12,7 @@
  * from a student or any source. I have not given my code 
  * to any student.
    Print your Name here: Duga Gang
-*/
+*/ 
 public class ManagementCompany extends Object{
 	public static final int MAX_PROPERTY = 5;
 	public static final int MGMT_WIDTH = 10;
@@ -22,8 +22,8 @@ public class ManagementCompany extends Object{
 	private double mgmFee;
 	private Property[] properties;
 	private Plot plot;
-	private int numberOfProperties;
-	private static int count = 0;
+	private int numberOfProperties = 0;
+	private int count = 0;  
 	
 	public ManagementCompany() 
 	{
@@ -59,86 +59,121 @@ public class ManagementCompany extends Object{
 	
 	public int addProperty(String name, String city, double rent, String owner) 
 	{
-		int status = 0;
-		
-			properties[count] = new Property(name, city, rent, owner);
-			if (count == properties.length - 1) 
+		int status = count;
+		numberOfProperties = count + 1;
+		properties[count] = new Property(name, city, rent, owner);
+		count++;
+			if (count == properties.length) 
 			{
 				status = -1;
 			}
-			if (properties[count] == null) 
+			if (properties[count-1] == null) 
 			{
 				status = -2;
 			}
-			if (plot.encompasses(properties[count].getPlot()) == false) 
+			if (count != 0) 
 			{
-				status = -3;
+				if (plot.encompasses(properties[count-1].getPlot()) == false) 
+				{
+					status = -3;
+				}
+				for (int i = 1; i < count; i++) 
+				{
+					if (properties[count-1].getPlot().overlaps(properties[i-1].getPlot()) == true) 
+					{
+						status = -4;
+					}
+				}
 			}
-			if (plot.overlaps(properties[count].getPlot())) 
+			else 
 			{
-				status = -4;
+				count = status - 1;
+				return count;
 			}
-			else  
-			{
-				status = count;
-			}
-		count++;
+		
 		return status;
 	}
 	public int addProperty(String name, String city, double rent, String owner, int x, int y, int width, int depth) 
 	{
 		int status = count;
-		
+		numberOfProperties = count + 1;
 		properties[count] = new Property(name, city, rent, owner, x, y, width, depth);
-		if (count == properties.length - 1) 
+		count++;
+		if (count == properties.length) 
 		{
 			status = -1;
+			return status;
 		}
-		if (properties[count] == null) 
+		if (properties[count-1] == null) 
 		{
 			status = -2;
+			return status;
 		}
-		if (plot.encompasses(properties[count].getPlot()) == false) 
+		if (plot.encompasses(properties[count-1].getPlot()) == false) 
 		{
 			status = -3;
+			return status;
 		}
-		for (int i = 0; i < properties.length; i ++) {
-			if (properties[count].getPlot().overlaps(properties[i].getPlot()) == true)  //? The first plot is automatically overlapping a plot
-			{
-				status = -4;
-				break;
-			}
+		if (count != 0) //skip testing the first plot because there is nothing for it to overlap
+		{	
 			
+			for (int i = 1; i < count; i++) 
+			{
+				if (properties[count-1].getPlot().overlaps(properties[i-1].getPlot()) == true) 
+				{
+					status = -4;
+					return status;
+				}
+			}
 		}
-	count++;
+		else 
+		{
+			count = status - 1;
+			return count;
+		}
+	
+	
 	return status;
 	
 	}
 	public int addProperty(Property property) 
 	{
-		int status = 0;
+		int status = count;
+		numberOfProperties = count + 1;
 		properties[count] = property;
-		if (count == properties.length - 1) 
+		count++;
+		if (count == properties.length) 
 		{
 			status = -1;
+			return status;
 		}
-		if (properties[count] == null) 
+		if (properties[count-1] == null) 
 		{
 			status = -2;
+			return status;
 		}
-		if (plot.encompasses(properties[count].getPlot()) == false) 
+		if (plot.encompasses(properties[count-1].getPlot()) == false) 
 		{
 			status = -3;
+			return status;
 		}
-		if (properties[count].getPlot().overlaps(plot))
+		if (count != 0) 
 		{
-			status = -4;
+			for (int i = 1; i < count-1; i++) 
+			{
+				if (properties[count-1].getPlot().overlaps(properties[i-1].getPlot()))
+				{
+					status = -4;
+					return status;
+				}
+			}
 		}
-		else  
+		else 
 		{
-			status = count;
+			count = status - 1;
+			return count;
 		}
-	count++;
+	
 	return status;
 	}
 	public void removeLastProperty() 
@@ -158,7 +193,7 @@ public class ManagementCompany extends Object{
 	}
 	public int getPropertiesCount() 
 	{
-		return count;
+		return numberOfProperties;
 	}
 	public double getTotalRent() 
 	{
